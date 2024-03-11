@@ -1,35 +1,62 @@
 from BinaryVector import BinaryVector
 from Polynomial import Polynomial
+import copy
 
-# Произведем разбор примеров из методички
-# 1 - 2 шаг работы кодера
-g_x = Polynomial([1, 0, 1, 1])
+# Задание параметров
+g_x = Polynomial([1, 0, 1, 1]) * Polynomial([1, 1])
+m_vec = BinaryVector("111")
+m_x = m_vec.to_polynomial()
 r = g_x.degree()
-m_vec = BinaryVector([1, 0, 1, 0])
-k = len(m_vec)
-m_pol = m_vec.to_polynomial()
+d = 4
+k = 3
+n = 7
 
-# Вычисление многочлена c(x) = m(x)x^r mod g(x)
-_, c_x = (m_pol * Polynomial.x(r)).divide(g_x)
+# Вычисление многочлена c(x) = m(x)x^r mod g(x) - контрольная сумма
+_, c_x = (m_x * Polynomial.x(r)).divide(g_x)
 
-# 3 шаг работы кодера
 # Вычисление многочлена a(x) = m(x)x^r + c(x)
-a_x = (m_pol * Polynomial.x(r)) + c_x
-# длина должны быть k + r
-a_vec = a_x.to_binary_vector()
+a_x = (m_x * Polynomial.x(r)) + c_x
 
-# работа декодера
-# на входе g_x, a_vec, e_vec (вектор ошибки, случайно измененный a_vec)
-e = BinaryVector("0110110")
-e_vec = a_vec + e
-b_vec = e_vec + a_vec
-b_pol = b_vec.to_polynomial()
+# Проверка на делимость
+_, reminder = a_x.divide(g_x)
+print("Проверка на делимость пункт 1: ", reminder)  # выводится 0
 
-# 2 шаг
-# вычисление s(x) = b(x) mod g(x)
-_, s_x = b_pol.divide(g_x)
+# Пример работы декодера для случая, когда в канале
+# произошло t ошибок при этом 1 <= t <= d - 1.
+# Сделаем случайно 3 ошибки
+a_vec_2 = a_x.to_binary_vector()
+a_vec_2.error_random_coefficient(3)
+a_x_edit = a_vec_2.to_polynomial()
+_, reminder = a_x_edit.divide(g_x)
+print("Случайно пункт 2: ", reminder)
 
-# произошли ошибки E = 1
-E = s_x.err()
+# Сделаем вручную 2 ошибки
+a_x_2 = copy.deepcopy(a_x)  # Клонируем многочлен a_x
+a_x_2.coefficients[-2:] = [1, 1]  # Изменяем два последних коэффициента
+_, reminder = a_x_2.divide(g_x)
+print("Вручную пункт 2: ", reminder)
 
+# Подбор t ошибок так, чтобы эти ошибки не обнаруживались,
+# при этом t > d - 1. Количество ошибок может быть больше 3.
+# Сделаем вручную 4 ошибки
+a_x_edit = Polynomial([1, 1, 1, 0, 1])
+_, reminder = a_x_edit.divide(g_x)
+print("Вручную пункт 3:", reminder)
 
+# Подбор t ошибок так, чтобы эти ошибки обнаруживались,
+# при этом t > d - 1. Количество ошибок может быть больше 3.
+# Сделаем случайно 4 ошибки
+a_vec_3 = a_x.to_binary_vector()
+a_vec_3.error_random_coefficient(5)
+a_x_edit = a_vec_3.to_polynomial()
+_, reminder = a_x_edit.divide(g_x)
+print("Случайно пункт 4: ", reminder)
+
+# Подбор t ошибок так, чтобы эти ошибки обнаруживались,
+# при этом t > d - 1. Количество ошибок может быть больше 3.
+# Сделаем вручную 4 ошибки
+a_vec_4 = a_x.to_binary_vector()
+a_vec_4.error_coefficient([3, 4, 5, 6])
+a_x_edit = a_vec_4.to_polynomial()
+_, reminder = a_x_edit.divide(g_x)
+print("Вручную пункт 4: ", reminder)
