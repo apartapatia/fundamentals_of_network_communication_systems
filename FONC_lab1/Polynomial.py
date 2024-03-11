@@ -2,6 +2,7 @@ class Polynomial:
     def __init__(self, coefficients):
         """
         Конструктор класса
+
         :param coefficients: Список булевых коэффицентов многочлена.
         """
         self.coefficients = coefficients
@@ -9,6 +10,7 @@ class Polynomial:
     def __str__(self):
         """
         Преобразование многочлена в строку.
+
         :return: Строковое представление многочлена
         """
         terms = []
@@ -27,6 +29,7 @@ class Polynomial:
     def __len__(self):
         """
         Получение длины полинома.
+
         :return: Длина полинома (количество ненулевых коэффициентов)
         """
         return len(self.coefficients)
@@ -34,6 +37,7 @@ class Polynomial:
     def __getitem__(self, key):
         """
         Получение коэффициента полинома по индексу.
+
         :param key: Индекс
         :return: Коэффициент полинома по указанному индексу
         """
@@ -42,6 +46,7 @@ class Polynomial:
     def divide(self, divisor):
         """
         Деление многочлена на divisor по полю 2
+
         :param divisor: Другой полином, на который нужно разделить данный полином
         :return: Результат деления (частное и остаток)
         """
@@ -64,6 +69,7 @@ class Polynomial:
     def degree(self):
             """
             Вычисление степени многочлена
+
             :return: степень многочлена
             """
             for i in range(len(self.coefficients) -1, -1, -1):
@@ -73,6 +79,7 @@ class Polynomial:
     def __add__(self, other):
         """
         Сумма полиномов
+
         :param other: суммирующий полином
         :return: сумма полиномов
         """
@@ -90,6 +97,7 @@ class Polynomial:
     def __mul__(self, other):
         """
         Умножение полиномов
+
         :param other: Полином, на который нужно умножить текущий полином
         :return: Результат умножения полиномов
         """
@@ -105,6 +113,7 @@ class Polynomial:
     def to_binary_vector(self):
         """
         Преобразует многочлен в двоичный вектор.
+
         :return: Двоичный вектор, представляющий многочлен.
         """
         from BinaryVector import BinaryVector
@@ -113,6 +122,7 @@ class Polynomial:
     def err(self):
         """
         Проверка на ошибки E = 1 - есть, E = 0 - нет
+
         :return: значение E
         """
         if self != 0:

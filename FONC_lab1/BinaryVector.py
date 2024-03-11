@@ -9,6 +9,11 @@ class BinaryVector:
         return ''.join(str(bit) for bit in self.vector)
 
     def to_polynomial(self):
+        """
+        Конвертирует в полином
+
+        :return: полином из битового представления
+        """
         polynomial_coeffs = self.vector
         return Polynomial(polynomial_coeffs)
 
@@ -25,6 +30,12 @@ class BinaryVector:
         return BinaryVector(result)
 
     def error_coefficient(self, indices):
+        """
+        Инвертирует индексы
+
+        :param indices: индекс, который необходимо инвертировать
+        :return: новый вектор
+        """
         for index in indices:
             if 0 <= index < len(self):
                 self.vector[index] = 1 - self.vector[index]
@@ -33,7 +44,7 @@ class BinaryVector:
 
     def random_indices(self, num_indices):
         """
-        Генерирует случайные индексы для вектора.
+        Генерирует случайные индексы для вектора
 
         Аргументы:
         num_indices (int): Количество случайных индексов, которые нужно сгенерировать.
@@ -48,7 +59,7 @@ class BinaryVector:
 
     def error_random_coefficient(self, num_errors):
         """
-        Инвертирует коэффициенты вектора по случайно сгенерированным индексам.
+        Инвертирует коэффициенты вектора по случайно сгенерированным индексам
 
         Аргументы:
         num_errors (int): Количество коэффициентов, которые нужно инвертировать.
