@@ -87,3 +87,47 @@ class Polynomial:
 
         return Polynomial(result[::-1])
 
+    def __mul__(self, other):
+        """
+        Умножение полиномов
+        :param other: Полином, на который нужно умножить текущий полином
+        :return: Результат умножения полиномов
+        """
+        result_degree = len(self) + len(other) - 2
+        result_coefficients = [0] * (result_degree + 1)
+
+        for i in range(len(self)):
+            for j in range(len(other)):
+                result_coefficients[i + j] ^= self.coefficients[i] & other.coefficients[j]
+
+        return Polynomial(result_coefficients)
+
+    def to_binary_vector(self):
+        """
+        Преобразует многочлен в двоичный вектор.
+        :return: Двоичный вектор, представляющий многочлен.
+        """
+        from BinaryVector import BinaryVector
+        return BinaryVector(''.join(map(str, self.coefficients)))
+
+    def err(self):
+        """
+        Проверка на ошибки E = 1 - есть, E = 0 - нет
+        :return: значение E
+        """
+        if self != 0:
+            return 1
+        else: return 0
+
+    @staticmethod
+    def x(power):
+        """
+        :param power: степень x
+        :return: многочлен x в степени
+        """
+        if power < 0:
+            raise ValueError("Степень должна быть неотрицательной")
+
+        coefficients = [0] * (power + 1)
+        coefficients[power] = 1
+        return Polynomial(coefficients[::-1])

@@ -1,19 +1,35 @@
 from BinaryVector import BinaryVector
 from Polynomial import Polynomial
 
-p = Polynomial([1, 1, 1, 1, 0, 1])
-p_1 = Polynomial([1, 0, 1, 0, 1])
-p_2 = Polynomial([1,1,1])
-p_3 = Polynomial([1,0,0])
-print(p.__str__() + " / " + p_1.__str__())
+# Произведем разбор примеров из методички
+# 1 - 2 шаг работы кодера
+g_x = Polynomial([1, 0, 1, 1])
+r = g_x.degree()
+m_vec = BinaryVector([1, 0, 1, 0])
+k = len(m_vec)
+m_pol = m_vec.to_polynomial()
 
-print("Сумма", p + p_1)
+# Вычисление многочлена c(x) = m(x)x^r mod g(x)
+_, c_x = (m_pol * Polynomial.x(r)).divide(g_x)
 
-quotient, remainder = p.divide(p_1)
-print("Частное:", quotient)
-print("Остаток:", remainder)
+# 3 шаг работы кодера
+# Вычисление многочлена a(x) = m(x)x^r + c(x)
+a_x = (m_pol * Polynomial.x(r)) + c_x
+# длина должны быть k + r
+a_vec = a_x.to_binary_vector()
 
-b = BinaryVector("111001")
-print(b.to_polynomial().__str__())
+# работа декодера
+# на входе g_x, a_vec, e_vec (вектор ошибки, случайно измененный a_vec)
+e = BinaryVector("0110110")
+e_vec = a_vec + e
+b_vec = e_vec + a_vec
+b_pol = b_vec.to_polynomial()
+
+# 2 шаг
+# вычисление s(x) = b(x) mod g(x)
+_, s_x = b_pol.divide(g_x)
+
+# произошли ошибки E = 1
+E = s_x.err()
 
 
