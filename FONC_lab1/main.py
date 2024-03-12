@@ -60,3 +60,25 @@ a_vec_4.error_coefficient([3, 4, 5, 6])
 a_x_edit = a_vec_4.to_polynomial()
 _, reminder = a_x_edit.divide(g_x)
 print("Вручную пункт 4: ", reminder)
+
+
+# 5555555555555
+m_5_vec = BinaryVector("11111")
+m_5_x = m_5_vec.to_polynomial()
+print(m_5_x)
+# Вычисление многочлена c(x) = m(x)x^r mod g(x) - контрольная сумма
+_, c_5_x = (m_5_x * Polynomial.x(r)).divide(g_x)
+print(c_5_x)
+
+# Вычисление многочлена a(x) = m(x)x^r + c(x)
+a_5_x = (m_5_x * Polynomial.x(r)) + c_5_x
+
+print(a_5_x)
+
+a_edit_x = a_5_x.to_binary_vector()
+a_edit_x.error_coefficient([0,7])
+a_5_edit = a_edit_x.to_polynomial()
+print(a_5_edit)
+_, res = a_5_edit.divide(g_x)
+
+print("Результат деления должен быть 0:", res, "На что делим: ", a_5_edit)
